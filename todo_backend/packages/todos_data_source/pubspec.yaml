@@ -1,0 +1,19 @@
+name: todos_data_source
+description: A generic interface for managing todos.
+version: 0.1.0+1
+publish_to: none
+
+environment:
+  sdk: ">=2.18.0 <3.0.0"
+
+dependencies:
+  equatable: ^2.0.5
+  json_annotation: ^4.7.0
+  meta: ^1.8.0
+
+dev_dependencies:
+  build_runner: ^2.3.3
+  json_serializable: ^6.5.4
+  mocktail: ^0.3.0
+  test: ^1.19.2
+  very_good_analysis: ^3.1.0
