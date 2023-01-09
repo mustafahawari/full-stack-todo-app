@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:todo_frontend/models/todo_model.dart';
+import 'package:todo_frontend/service/api_service.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,53 +16,131 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const HomePage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _HomePageState extends State<HomePage> {
+  ApiService api = ApiService();
+  var titleEditingController = TextEditingController();
+  var descriptionEditingController = TextEditingController();
+  List<TodoModel>? todos;
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  @override
+  void initState() {
+    // api.getTodos();
+    getAlltodos();
+    super.initState();
+  }
+
+  getAlltodos() async {
+    todos = await api.getTodos();
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: const Text("Todo App"),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      body: todos == null
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : todos!.isNotEmpty
+              ? ListView.separated(
+                  itemCount: todos!.length,
+                  separatorBuilder: (context, index) => const SizedBox(
+                        height: 10,
+                      ),
+                  itemBuilder: (context, index) {
+                    return Card(
+                      child: ListTile(
+                        title: Text(todos![index].title),
+                        // tileColor: Colors.grey,
+                        subtitle:
+                            Text(todos![index].description ?? "No description"),
+                        leading: Checkbox(
+                          value: todos![index].completed,
+                          onChanged: (value) {},
+                        ),
+                      ),
+                    );
+                  })
+              : const Center(
+                  child: Text("No todos"),
+                ),
+      floatingActionButton: Builder(
+        builder: (context) {
+          return FloatingActionButton(
+            onPressed: () async {
+              final a = await showModalBottomSheet(
+                context: context,
+                builder: (context) => Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    // mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextField(
+                        controller: titleEditingController,
+                        decoration: InputDecoration(
+                          hintText: "Enter title",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      TextField(
+                        controller: descriptionEditingController,
+                        decoration: InputDecoration(
+                          hintText: "Enter title",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          if (titleEditingController.text.isNotEmpty) {
+                            TodoModel todoModel = TodoModel(
+                              title: titleEditingController.text,
+                              description: descriptionEditingController.text,
+                            );
+                            Navigator.pop(context, todoModel);
+                          }
+                        },
+                        child: const Text("Add"),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+              if (a != null) {
+                await api.addTodos(a as TodoModel);
+                 todos  = await api.getTodos();
+                setState(()  {
+                  
+                });
+              }
+            },
+            child: const Icon(Icons.add),
+          );
+        },
       ),
     );
   }

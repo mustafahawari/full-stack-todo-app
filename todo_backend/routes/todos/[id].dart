@@ -40,7 +40,7 @@ Future<Response> _put(RequestContext context, String id, Todo todo) async {
     todo.copyWith(
       title: updatedTodo.title,
       description: updatedTodo.description,
-      isCompleted: updatedTodo.isCompleted,
+      completed: updatedTodo.completed,
     ),
   );
 

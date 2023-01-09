@@ -8,6 +8,8 @@ environment:
 
 
 dependencies: 
+  db:
+    path: ../db
   todos_data_source:
     path: ../todos_data_source
   uuid: ^3.0.7

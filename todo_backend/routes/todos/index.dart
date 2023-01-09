@@ -28,8 +28,10 @@ Future<Response> _get(RequestContext context) async {
 
 Future<Response> _post(RequestContext context) async {
   final dataSource = context.read<TodosDataSource>();
+  final receivedData = await context.request.json() as Map<String, dynamic>;
+  print("post data $receivedData");
   final todo =
-      Todo.fromJson(await context.request.json() as Map<String, dynamic>);
+      Todo.fromJson(receivedData);
   return Response.json(
     statusCode: HttpStatus.created,
     body: await dataSource.create(todo),

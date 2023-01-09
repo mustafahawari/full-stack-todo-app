@@ -22,17 +22,17 @@ part 'todo.g.dart';
 @JsonSerializable()
 class Todo extends Equatable {
   /// {@macro todo}
-  Todo({
+  const Todo({
     this.id,
     required this.title,
     this.description = '',
-    this.isCompleted = false,
-  }) : assert(id == null || id.isNotEmpty, 'id cannot be empty');
+    this.completed = false,
+  }) : assert(id == null,'id cannot be empty');
 
   /// The unique identifier of the todo.
   ///
   /// Cannot be empty.
-  final String? id;
+  final int? id;
 
   /// The title of the todo.
   ///
@@ -47,22 +47,22 @@ class Todo extends Equatable {
   /// Whether the todo is completed.
   ///
   /// Defaults to `false`.
-  final bool isCompleted;
+  final bool completed;
 
   /// Returns a copy of this todo with the given values updated.
   ///
   /// {@macro todo}
   Todo copyWith({
-    String? id,
+    int? id,
     String? title,
     String? description,
-    bool? isCompleted,
+    bool? completed,
   }) {
     return Todo(
       id: id ?? this.id,
       title: title ?? this.title,
       description: description ?? this.description,
-      isCompleted: isCompleted ?? this.isCompleted,
+      completed: completed ?? this.completed,
     );
   }
 
@@ -73,5 +73,5 @@ class Todo extends Equatable {
   Map<String, dynamic> toJson() => _$TodoToJson(this);
 
   @override
-  List<Object?> get props => [id, title, description, isCompleted];
+  List<Object?> get props => [id, title, description, completed];
 }

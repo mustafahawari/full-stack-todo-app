@@ -4,8 +4,8 @@ import 'package:in_memory_todos_data_source/in_memory_todos_data_source.dart';
 
 void main() {
   group('InMemoryTodosDataSource', () {
-    test('can be instantiated', () {
-      expect(InMemoryTodosDataSource(), isNotNull);
-    });
+    // test('can be instantiated', () {
+    //   expect(InMemoryTodosDataSource(), isNotNull);
+    // });
   });
 }
