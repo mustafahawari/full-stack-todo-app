@@ -25,7 +25,7 @@ class Todo extends Equatable {
   const Todo({
     this.id,
     required this.title,
-    this.description = '',
+    this.description,
     this.completed = false,
   }) : assert(id == null,'id cannot be empty');
 
@@ -42,7 +42,7 @@ class Todo extends Equatable {
   /// The description of the todo.
   ///
   /// Defaults to an empty string.
-  final String description;
+  final String? description;
 
   /// Whether the todo is completed.
   ///
@@ -74,4 +74,7 @@ class Todo extends Equatable {
 
   @override
   List<Object?> get props => [id, title, description, completed];
+
+  @override
+  bool? get stringify => true;
 }

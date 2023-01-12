@@ -16,6 +16,7 @@ class InMemoryTodosDataSource implements TodosDataSource {
 
     try {
       await _databaseConnection.connect();
+      print("todo.description ${todo.description}");
       final result = await _databaseConnection.db.query(
         '''
     INSERT INTO todos (title, description, completed, created_at)
@@ -34,7 +35,7 @@ class InMemoryTodosDataSource implements TodosDataSource {
       }
       // _cache[id] = createTodo;
       final todoMap = result.first.toColumnMap();
-
+      print("todoMap: $todoMap");
       return Todo.fromJson(todoMap);
     } catch (e) {
       rethrow;
@@ -44,7 +45,7 @@ class InMemoryTodosDataSource implements TodosDataSource {
   }
 
   @override
-  Future<void> delete(String id) async {
+  Future<void> delete(int id) async {
     // _cache.remove(id);
     try {
       await _databaseConnection.connect();
@@ -63,7 +64,7 @@ class InMemoryTodosDataSource implements TodosDataSource {
   }
 
   @override
-  Future<Todo?> read(String id) async {
+  Future<Todo?> read(int id) async {
     try {
       await _databaseConnection.connect();
       final result = await _databaseConnection.db.query(
@@ -71,10 +72,11 @@ class InMemoryTodosDataSource implements TodosDataSource {
         substitutionValues: {'id': id},
       );
       if (result.isEmpty) {
-        throw Exception('Todo not found');
+        return null;
       }
       return Todo.fromJson(result.first.toColumnMap());
     } catch (e) {
+      print(e.toString());
       throw Exception('Unexpected Error');
     } finally {
       await _databaseConnection.closeDb();
@@ -101,7 +103,7 @@ class InMemoryTodosDataSource implements TodosDataSource {
   }
 
   @override
-  Future<Todo> update(String id, Todo todo) async {
+  Future<Todo> update(int id, Todo todo) async {
     // return _cache.update(id, (value) => todo);
     try {
       await _databaseConnection.connect();

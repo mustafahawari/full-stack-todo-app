@@ -9,7 +9,7 @@ part of 'todo.dart';
 Todo _$TodoFromJson(Map<String, dynamic> json) => Todo(
       id: json['id'] as int?,
       title: json['title'] as String,
-      description: json['description'] as String? ?? '',
+      description: json['description'] as String?,
       completed: json['completed'] as bool? ?? false,
     );
 

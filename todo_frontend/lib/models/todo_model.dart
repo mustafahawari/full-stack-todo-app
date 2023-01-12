@@ -1,8 +1,10 @@
-class TodoModel {
-   int? id;
-   String title;
-   String? description;
-   bool? completed;
+import 'package:equatable/equatable.dart';
+
+class TodoModel extends Equatable {
+  int? id;
+  String title;
+  String? description;
+  bool? completed;
 
   TodoModel({this.id, required this.title, this.description, this.completed});
   factory TodoModel.fromJson(Map<String, dynamic> data) {
@@ -17,9 +19,14 @@ class TodoModel {
     return {
       "id": id,
       "title": title,
-      "description" : description ?? "",
+      "description": description,
       "completed": completed ?? false,
     };
   }
-  
+
+  @override
+  bool? get stringify => true;
+
+  @override
+  List<Object?> get props => [id, title, description, completed];
 }

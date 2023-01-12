@@ -14,12 +14,12 @@ abstract class TodosDataSource {
   Future<List<Todo>> readAll();
 
   /// Return a todo with the provided [id] if one exists.
-  Future<Todo?> read(String id);
+  Future<Todo?> read(int id);
 
   /// Update the todo with the provided [id] to match [todo] and
   /// return the updated todo.
-  Future<Todo> update(String id, Todo todo);
+  Future<Todo> update(int id, Todo todo);
 
   /// Delete the todo with the provided [id] if one exists.
-  Future<void> delete(String id);
+  Future<void> delete(int id);
 }
